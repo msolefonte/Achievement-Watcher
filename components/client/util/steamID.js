@@ -1,5 +1,5 @@
 const util = require('util');
-const SteamID = require('steamid');
+const SteamID = require('components/client/util/steamID');
 const xml2js = require('xml2js');
 const request = require('request-zero');
 
