@@ -4,7 +4,7 @@
   "version": "1.3.6",
   "main": "init.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron ",
     "native-rebuild": "call .\\node_modules\\.bin\\electron-rebuild.cmd",
     "clean": "npm prune --production",
     "prepare": "patch-package"
