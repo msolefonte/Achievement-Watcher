@@ -1,0 +1,177 @@
+{
+  "achievements": "成就",
+  "perfectGame": "完美达成的游戏数",
+  "completionRate": "游戏平均完成率",
+  "emptyList": "暂无游戏",
+  "loading": "加载中",
+  "unlocked": "已解锁",
+  "locked": "未解锁",
+  "globalStat": "所有玩家的百分比",
+  "hiddenRemain": "项隐藏成就未解锁",
+  "revealedOnceUnlocked": "每项成就的详情将在解锁后显示",
+  "noneUnlocked": "尚未解锁任何成就",
+  "play": "快来玩吧！",
+  "scrollUp": "向上滚动",
+  "allGamesBackButton": "所有游戏",
+  "removeFromList": "从列表中删除",
+  "buildIconPrefetchCache": "构建用于通知的图标缓存",
+  "settings" : {
+    "title": "设置",
+    "sideMenu":{
+      "general": "通用",
+      "notification": "通知",
+      "folder": "目录",
+      "source": "来源",
+      "advanced": "高级",
+      "debug": "调试"
+    },
+    "common": {
+      "show": "显示",
+      "hide": "隐藏",
+      "enable": "启用",
+      "disable": "禁用",
+      "cancel": "取消",
+      "save": "保存",
+      "version": "版本"
+    },
+    "general": {
+      "language": {
+        "name": "语言",
+        "description": ["帮助翻译","点击此处"]
+      },
+      "thumbnail": {
+        "name": "缩略图方向",
+        "value": {
+          "portrait": "纵向",
+          "landscape": "横向"
+        }
+      },
+      "hiddenAch": {
+        "name": "隐藏成就"
+      },
+      "mergeDuplicates": {
+        "name": "合并重复项"
+      },
+      "timeMerge": {
+        "name": "时间戳合并",
+        "description": "合并重复项时，首选哪个时间值？",
+        "value": {
+          "recent": "最近的",
+          "oldest": "最早的"
+        }
+      },
+      "hideZero": {
+        "name": "隐藏未解锁任何成就的游戏"
+      }
+    },
+    "notification" : {
+      "title": {
+        "common": "通用",
+        "toast": "Toast 通知",
+        "transport": "传输"
+      },
+      "info" : {
+        "toast" : "某些功能仅 Windows 10 可用"
+      },
+      "option": {
+        "notification" : {
+          "name": "通知",
+          "description": "尽可能在成就解锁时通知"
+        },
+        "souvenir" : {
+          "name": "纪念",
+          "description": "解锁成就时截图"
+        },
+        "showDesc" : {
+          "name": "显示描述",
+          "description": "显示成就描述（如果有）"
+        },
+        "rumble" : {
+          "name": "手柄震动（XInput）",
+          "description": "解锁成就时震动第一个手柄"
+        },
+        "notifyOnProgress" : {
+          "name": "进度报告",
+          "description": "尽可能通知成就进度"
+        },
+        "customToastAudio" : {
+          "name": "通知音效",
+          "description": "指定显示 Toast 通知时播放的音效",
+          "value": {
+            "systemDefault": "默认",
+            "muted": "静音"
+          }
+        },
+        "toastSouvenir" : {
+          "name": "显示纪念",
+          "description": "在通知里显示纪念截图",
+          "value": {
+            "top" : "顶部",
+            "bottom" : "底部"
+          }
+        },
+        "groupToast" : {
+          "name": "按游戏分组",
+          "description": "将操作中心中相同游戏的 Toast 通知分为一组"
+        },
+        "useToast" : {
+          "name": "Toast 通知",
+          "description": "Windows 8-10 Toast 通知"
+        },
+        "useWinRT" : {
+          "name": "Windows 10 WinRT API",
+          "description": "使用 WinRT 代替 PowerShell 来更快地显示 Toast 通知（如果可用）"
+        },
+        "useBalloon" : {
+          "name": "气球提示",
+          "description": "在 Toast 通知不可用时使用气球提示"
+        },
+        "useWS" : {
+          "description": "向所有连接的客户端广播成就"
+        }
+      }
+    },
+    "folder": {
+      "headline": "在哪里查找成就文件：",
+      "default": "默认目录",
+      "custom": "用户目录",
+      "addInfo": [
+        "选择一个包含 appid 文件夹的目录。",
+        "对于 ALI213、Hoodlum、RPCS3，请选择",
+        "ALI213.ini、valve.ini、hlm.ini、ds.ini 或 RPCS3.exe 文件所在的目录。"],
+      "add": "添加目录"
+    },
+    "source": {
+      "legitSteam": {
+        "name": "显示 Steam 游戏",
+        "description": "必须安装 Steam 并将您的 Steam 个人资料公开！",
+        "value": {
+          "none": "不显示",
+          "installed": "已安装",
+          "owned": "已拥有"
+        }
+      },
+      "steamEmu": {
+        "name": "Steam 模拟器"
+      },
+      "greenLuma": {
+        "description": "GreenLuma 2020 与 Reborn"
+      },
+      "rpcs3": {
+        "description": "PS3 模拟器"
+      },
+      "lumaPlay": {
+        "description": "Uplay 模拟器"
+      },  
+      "importCache": {
+        "name": "导入通知缓存",
+        "description": "导入 Watchdog 的缓存作为成就的另一个来源"
+      }
+    },
+    "advanced": {
+      "blacklistTitle": "AppID 黑名单",
+      "blacklistButton": "重置黑名单",
+      "blacklistInfo": "右键点击一个游戏，将其添加到黑名单中。"
+    } 
+  } 
+}
