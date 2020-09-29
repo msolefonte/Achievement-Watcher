@@ -1,10 +1,6 @@
-temp/
-todo.txt
-components/server/start.sh
-
 # Node Dependencies
 **/node_modules/
 
 # IDE
-.idea
-.vscode
+**/.idea
+**/.vscode

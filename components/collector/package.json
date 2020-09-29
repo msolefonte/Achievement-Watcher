@@ -1,0 +1,44 @@
+{
+  "name": "achievement-watcher-collector",
+  "version": "0.1.0",
+  "description": "A sexy achievement file parser",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "contributors": [
+    {
+      "name": "Marc Solé",
+      "url": "https://github.com/msolefonte"
+    },
+    {
+      "name": "Anthony Beaumont",
+      "url": "https://github.com/xan105"
+    }
+  ],
+  "license": "LGPL-3.0-only",
+  "dependencies": {
+    "fast-glob": "^3.2.4",
+    "ini": "^1.3.5",
+    "lodash.omit": "^4.5.0",
+    "mkdirp": "^1.0.4",
+    "moment": "^2.29.0",
+    "node-html-parser": "^1.2.21",
+    "normalize-path": "^3.0.0",
+    "regodit": "^1.0.1",
+    "request-zero": "^0.2.9",
+    "url": "^0.11.0",
+    "accountpicture-ms-extractor": "^1.1.0",
+    "adm-zip": "0.4.13",
+    "argv-split": "^2.0.1",
+    "crc": "^3.8.0",
+    "deepmerge": "^4.2.2",
+    "find-up": "^4.1.0",
+    "js-yaml": "^3.13.1",
+    "minimist": "^1.2.5",
+    "rimraf": "^2.7.1",
+    "steamid": "^1.1.3",
+    "windows-focus-assist": "^1.2.1",
+    "xml2js": "^0.4.23"
+  }
+}
