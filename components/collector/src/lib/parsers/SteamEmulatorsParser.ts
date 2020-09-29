@@ -8,17 +8,17 @@ import {IGameData, IGameMetadata, ISteamLanguage} from '../../types';
 const path = require('path');
 const glob = require('fast-glob');
 const normalize = require('normalize-path');
-const ini = require('ini');
-const omit = require('lodash.omit');
+// const ini = require('ini');
+// const omit = require('lodash.omit');
 // const moment = require('moment');
 // const request = require('request-zero');
 // const urlParser = require('url');
-const ffs = require('../util/feverFS.ts');
+// const ffs = require('../util/feverFS.ts');
 // const htmlParser = require('node-html-parser').parse;
 const regedit = require('regodit');
 // const steamID = require('../util/steamID');
-const steamLanguages = require("../locale/steam.json");
-const sse = require('./sse.js');
+const steamLanguages = require("../../../locale/steam.json");
+// const sse = require('./sse.js');
 
 // TODO CHECK LOGS / THROWS
 
@@ -115,7 +115,7 @@ class SteamEmulatorsParser extends Parser {
     // }
 
     // TODO
-    async getGameMetadata(appId: string, lang: string, key: string): Promise<IGameData> {
+    async getGameData(appId: string, lang: string, key: string): Promise<IGameData> {
         if (!steamLanguages.some( (language: ISteamLanguage) => { return language.api === lang } )) {
               throw "Unsupported API language code";
         }
@@ -123,98 +123,110 @@ class SteamEmulatorsParser extends Parser {
         const cachePath: string = path.join(this.achievementWatcherRootPath, 'steam_cache/schema', lang);
         const filePath: string = path.join(`${cachePath}`, `${appId}.db`);
 
-        let result: IGameData;
 
-        // TODO FFS PORT
-        if (await ffs.promises.existsAndIsYoungerThan(filePath, {timeUnit: 'month', time: 1})) {
-            result = JSON.parse(await ffs.promises.readFile(filePath));
-        } else {
-            // TODO CHECK THIS WHEN NOT KEY?
-            if (key) {
-                result = await getSteamData(config);
-            } else {
-                result = await getSteamDataFromSRV(config.appId, config.lang);
-            }
-            ffs.promises.writeFile(filePath, JSON.stringify(result, null, 2)).catch((err) => {
-            });
-        }
+        console.log(filePath);
+        console.log(key);
 
+        // let result: IGameData;
+        // FIXME
+        // @ts-ignore
+        let result: IGameData = undefined;
+
+        // // TODO FFS PORT
+        // if (await ffs.promises.existsAndIsYoungerThan(filePath, {timeUnit: 'month', time: 1})) {
+        //     result = JSON.parse(await ffs.promises.readFile(filePath));
+        // } else {
+        //     // TODO CHECK THIS WHEN NOT KEY?
+        //     if (key) {
+        //         // FIXME
+        //         // result = await getSteamData(config);
+        //     } else {
+        //         // FIXME
+        //         // result = await getSteamDataFromSRV(config.appId, config.lang);
+        //     }
+        //     // FIXME
+        //     ffs.promises.writeFile(filePath, JSON.stringify(result, null, 2)).catch(() => {
+        //     });
+        // }
+
+        // @ts-ignore
+        // FIXME
         return result;
     }
 
     // TODO
     async getAchievements(filePath: string) {
-            const files = [
-                'achievements.ini',
-                'achievements.json',
-                'achiev.ini',
-                'stats.ini',
-                'Achievements.Bin',
-                'achieve.dat',
-                'Achievements.ini',
-                'stats/achievements.ini',
-                'stats.bin',
-                'stats/CreamAPI.Achievements.cfg'
-            ];
+            // const files = [
+            //     'achievements.ini',
+            //     'achievements.json',
+            //     'achiev.ini',
+            //     'stats.ini',
+            //     'Achievements.Bin',
+            //     'achieve.dat',
+            //     'Achievements.ini',
+            //     'stats/achievements.ini',
+            //     'stats.bin',
+            //     'stats/CreamAPI.Achievements.cfg'
+            // ];
+            //
+            // const filter = ['SteamAchievements', 'Steam64', 'Steam'];
+            //
+            // let local;
+            // for (let file of files) {
+            //     try {
+            //
+            //         if (path.parse(file).ext == '.json') {
+            //             local = JSON.parse(await ffs.promises.readFile(path.join(filePath, file), 'utf8'));
+            //         } else if (file === 'stats.bin') {
+            //             local = sse.parse(await ffs.promises.readFile(path.join(filePath, file)));
+            //         } else {
+            //             local = ini.parse(await ffs.promises.readFile(path.join(filePath, file), 'utf8'));
+            //         }
+            //         break;
+            //     } catch (e) {
+            //     }
+            // }
+            // if (!local) {
+            //     throw `No achievement file found in '${filePath}'`;
+            // }
+        console.log(filePath);
+        let result = {};
 
-            const filter = ['SteamAchievements', 'Steam64', 'Steam'];
-
-            let local;
-            for (let file of files) {
-                try {
-
-                    if (path.parse(file).ext == '.json') {
-                        local = JSON.parse(await ffs.promises.readFile(path.join(filePath, file), 'utf8'));
-                    } else if (file === 'stats.bin') {
-                        local = sse.parse(await ffs.promises.readFile(path.join(filePath, file)));
-                    } else {
-                        local = ini.parse(await ffs.promises.readFile(path.join(filePath, file), 'utf8'));
-                    }
-                    break;
-                } catch (e) {
-                }
-            }
-            if (!local) {
-                throw `No achievement file found in '${filePath}'`;
-            }
-
-            let result = {};
-
-            if (local.AchievementsUnlockTimes && local.Achievements) { //hoodlum DARKSiDERS
-
-                for (let i in local.Achievements) {
-                    if (local.Achievements[i] == 1) {
-                        result[`${i}`] = {Achieved: '1', UnlockTime: local.AchievementsUnlockTimes[i] || null};
-                    }
-                }
-            } else if (local.State && local.Time) { //3DM
-
-                for (let i in local.State) {
-                    if (local.State[i] == '0101') {
-                        result[i] = {
-                            Achieved: '1',
-                            UnlockTime: new DataView(new Uint8Array(Buffer.from(local.Time[i].toString(), 'hex')).buffer).getUint32(0, true) || null
-                        };
-                    }
-                }
-            } else {
-                result = omit(local.ACHIEVE_DATA || local, filter);
-            }
-
-            for (let i in result) {
-                if (result[i].State) { //RLD!
-                    try {
-                        //uint32 little endian
-                        result[i].State = new DataView(new Uint8Array(Buffer.from(result[i].State.toString(), 'hex')).buffer).getUint32(0, true);
-                        result[i].CurProgress = new DataView(new Uint8Array(Buffer.from(result[i].CurProgress.toString(), 'hex')).buffer).getUint32(0, true);
-                        result[i].MaxProgress = new DataView(new Uint8Array(Buffer.from(result[i].MaxProgress.toString(), 'hex')).buffer).getUint32(0, true);
-                        result[i].Time = new DataView(new Uint8Array(Buffer.from(result[i].Time.toString(), 'hex')).buffer).getUint32(0, true);
-                    } catch (e) {
-                    }
-                } else if (result[i].unlocktime && result[i].unlocktime.length === 7) { //creamAPI
-                    result[i].unlocktime = +result[i].unlocktime * 1000; //cf: https://cs.rin.ru/forum/viewtopic.php?p=2074273#p2074273 | timestamp is invalid/incomplete
-                }
-            }
+            // if (local.AchievementsUnlockTimes && local.Achievements) { //hoodlum DARKSiDERS
+            //
+            //     for (let i in local.Achievements) {
+            //         if (local.Achievements[i] == 1) {
+            //             result[`${i}`] = {Achieved: '1', UnlockTime: local.AchievementsUnlockTimes[i] || null};
+            //         }
+            //     }
+            // } else if (local.State && local.Time) { //3DM
+            //
+            //     for (let i in local.State) {
+            //         if (local.State[i] == '0101') {
+            //             result[i] = {
+            //                 Achieved: '1',
+            //                 UnlockTime: new DataView(new Uint8Array(Buffer.from(local.Time[i].toString(), 'hex')).buffer).getUint32(0, true) || null
+            //             };
+            //         }
+            //     }
+            // } else {
+            //     result = omit(local.ACHIEVE_DATA || local, filter);
+            // }
+            //
+            // for (let i in result) {
+            //     if (result[i].State) { //RLD!
+            //         try {
+            //             //uint32 little endian
+            //             result[i].State = new DataView(new Uint8Array(Buffer.from(result[i].State.toString(), 'hex')).buffer).getUint32(0, true);
+            //             result[i].CurProgress = new DataView(new Uint8Array(Buffer.from(result[i].CurProgress.toString(), 'hex')).buffer).getUint32(0, true);
+            //             result[i].MaxProgress = new DataView(new Uint8Array(Buffer.from(result[i].MaxProgress.toString(), 'hex')).buffer).getUint32(0, true);
+            //             result[i].Time = new DataView(new Uint8Array(Buffer.from(result[i].Time.toString(), 'hex')).buffer).getUint32(0, true);
+            //         } catch (e) {
+            //         }
+            //     } else if (result[i].unlocktime && result[i].unlocktime.length === 7) { //creamAPI
+            //         result[i].unlocktime = +result[i].unlocktime * 1000; //cf: https://cs.rin.ru/forum/viewtopic.php?p=2074273#p2074273 | timestamp is invalid/incomplete
+            //     }
+            // }
 
             return result;
     }
@@ -472,7 +484,7 @@ class SteamEmulatorsParser extends Parser {
     //     }
     // }
 
-    async getFoldersToScan(additionalFoldersToScan: string[]): string[] {
+    async getFoldersToScan(additionalFoldersToScan: string[]): Promise<string[]> {
         let foldersToScan: string[] = [
             path.join(this.publicDataPath, 'Documents/Steam/CODEX'),
             path.join(this.appDataPath, 'Goldberg SteamEmu Saves'),
@@ -502,6 +514,8 @@ class SteamEmulatorsParser extends Parser {
         return foldersToScan;
     }
 }
+
+new SteamEmulatorsParser().scan().then((res) => console.log(res));
 
 // export = {scan, scanLegit, getGameData, getAchievementsFromFile, getAchievementsFromAPI};
 export = {SteamParser: SteamEmulatorsParser};
