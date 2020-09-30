@@ -1,18 +1,18 @@
 // TODO OR USE https://github.com/xan105/node-fs
 
-// "use strict";
+"use strict";
 //
 // const crypto = require('crypto');
-// const fs = require('fs');
-// const mkdirp = require('mkdirp');
-// const moment = require('moment');
-// const path = require('path');
+const fs = require('fs');
+const mkdirp = require('mkdirp');
+const moment = require('moment');
+const path = require('path');
 // const rimraf = require('rimraf');
 //
-// const ffs: any = {
-//   sync: {},
-//   promises: {}
-// };
+const ffs: any = {
+  sync: {},
+  promises: {}
+};
 //
 // ffs.promises.mkdir = function (dirPath: String, options= {}) {
 //   return new Promise((resolve,reject) => {
@@ -77,34 +77,35 @@
 //   return sum.digest('hex');
 // }
 //
-// ffs.promises.existsAndIsYoungerThan = function (path: String, option = {}) {
-//
-//    let options = {
-//     timeUnit: option.timeUnit || 'days',
-//     time: option.time || 7,
-//     isDir : option.isDir || false
-//    }
-//
-//    return new Promise((resolve, reject) => {
-//       fs.stat(path, function(err, stats) {
-//           if (err) {
-//             return resolve(false);
-//           } else {
-//             let exists = (options.isDir) ? stats.isDirectory() : stats.isFile();
-//
-//             if (exists) {
-//               try{
-//                 return resolve(moment().diff(moment(stats.mtime),options.timeUnit) <= options.time);
-//               } catch(err) {
-//                 return reject(err);
-//               }
-//             } else {
-//               return resolve(false);
-//             }
-//           }
-//       });
-//    });
-// }
+// TODO PFF FIXME HARD
+ffs.promises.existsAndIsYoungerThan = function (path: String, option: any = {}) {
+
+   let options = {
+    timeUnit: option.timeUnit || 'days',
+    time: option.time || 7,
+    isDir : option.isDir || false
+   }
+
+   return new Promise((resolve, reject) => {
+      fs.stat(path, function(err: any, stats: any) {
+          if (err) {
+            return resolve(false);
+          } else {
+            let exists = (options.isDir) ? stats.isDirectory() : stats.isFile();
+
+            if (exists) {
+              try{
+                return resolve(moment().diff(moment(stats.mtime),options.timeUnit) <= options.time);
+              } catch(err) {
+                return reject(err);
+              }
+            } else {
+              return resolve(false);
+            }
+          }
+      });
+   });
+}
 //
 // ffs.sync.existsAndIsYoungerThan = function (path: String, option = {}) {
 //
@@ -233,11 +234,11 @@
 //   });
 // }
 //
-// ffs.sync.writeFile = function(filePath, data, options) {
-//     mkdirp.sync(path.parse(filePath).dir);
-//     fs.writeFileSync(filePath, data, options);
-//     return filePath;
-// }
+ffs.sync.writeFile = function(filePath: string, data: any, options: any) {
+    mkdirp.sync(path.parse(filePath).dir);
+    fs.writeFileSync(filePath, data, options);
+    return filePath;
+}
 //
 // ffs.promises.copyFile = function(src, dest, flags) {
 //   return new Promise((resolve,reject) => {
@@ -261,19 +262,19 @@
 //     mkdirp.sync(path.parse(dest).dir);
 //     fs.copyFileSync(src, dest, flags);
 // }
-//
-// ffs.promises.readFile = function(filePath, options) {
-//   return new Promise((resolve,reject) => {
-//      fs.readFile(filePath, options, function (err,data) {
-//            if (err) {
-//                return reject(err);
-//            } else {
-//               return resolve(data);
-//           }
-//      });
-//   });
-// }
-//
+
+ffs.promises.readFile = function(filePath: string, options: any) {
+  return new Promise((resolve,reject) => {
+     fs.readFile(filePath, options, function (err: any ,data: any) {
+           if (err) {
+               return reject(err);
+           } else {
+              return resolve(data);
+          }
+     });
+  });
+}
+
 // ffs.sync.readFile = fs.readFileSync;
 //
 // ffs.promises.unlink = ffs.promises.rm = function(filePath) {
@@ -287,5 +288,4 @@
 //     fs.unlinkSync(filePath);
 //    }catch(e){}
 // }
-//
-// export { ffs };
+export { ffs };

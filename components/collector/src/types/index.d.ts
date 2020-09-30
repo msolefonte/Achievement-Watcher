@@ -1,3 +1,4 @@
+// TODO IScanResult?
 export interface IGameMetadata {
     appId: string;
     data: {
@@ -28,25 +29,57 @@ export interface ISteamUser {
     name: string;
 }
 
+// TODO
 export interface IGetAchievementsConfig {
 
 }
 
-export interface IAchievement {
-
+export interface IUnlockedAchievement {
+    name: string;
+    achieved: 0 | 1;
+    currentProgress: number;
+    maxProgress: number;
+    unlockTime: number;
 }
 
-// TODO WHEN USE GAME DATA AND GAME METADATA
+export interface IAchievement {
+    name: string;
+    defaultvalue: number;
+    hidden: 0 | 1;
+    icon: string;
+    icongray: string;
+}
+
 export interface IGameData {
-    appId: string;
+    name: string;
+    appid: string;
     binary: string;
     img: {
         header: string;
         background: string;
+        portrait: string;
+        hero: string;
         icon: string;
     }
-    achievements: {
+    achievement: {
         total: number;
-        list: IAchievement[]; // TODO Check
+        list: IAchievement[];
     }
+}
+
+export interface ISteamDbData {
+    binary: string;
+    icon: string;
+    header: string;
+    name: string;
+}
+
+export interface ISteamDbBinary {
+    executable: string;
+    windows: boolean;
+}
+
+export interface INormalizedProgress {
+    currentProgress: number,
+    maximProgress: number
 }

@@ -2,7 +2,7 @@
 
 const path = require("path");
 const ini = require("ini");
-const ffs = require("../src/lib/util/feverFS.ts");
+const ffs = require("../src/lib/util/feverFileSystem.ts");
 const aes = require("../src/lib/util/aes.ts");
 // const steamLanguages = require(path.join(appPath,"locale/steam.json"));
 
