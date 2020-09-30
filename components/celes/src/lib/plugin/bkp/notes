@@ -1,5 +1,0 @@
-
-path.join(this.appDataPath, 'Goldberg SteamEmu Saves'), -> goldberg
-path.join(this.programDataPath, 'Steam') + '/*', -> reloaded and 3DM
-path.join(this.appDataPath, 'SmartSteamEmu'), -> sse
-path.join(this.appDataPath, 'CreamAPI') -> creamapi

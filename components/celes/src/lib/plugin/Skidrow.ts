@@ -9,6 +9,8 @@ import {SteamEmulatorParser} from './lib/SteamEmulatorParser';
 const path = require('path');
 
 class Skidrow extends SteamEmulatorParser {
+    readonly source: string = 'Skidrow';
+
     private readonly localAppDataPath: string = <string>process.env['LOCALAPPDATA'];
 
     constructor() {

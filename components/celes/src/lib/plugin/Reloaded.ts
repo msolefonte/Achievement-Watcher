@@ -10,6 +10,8 @@ const omit = require('lodash.omit');
 const path = require('path');
 
 class Reloaded extends SteamEmulatorParser {
+    readonly source: string = 'Reloaded - 3DM';
+
     private readonly programDataPath: string = <string>process.env['PROGRAMDATA'];
 
     constructor() {
@@ -22,19 +24,18 @@ class Reloaded extends SteamEmulatorParser {
         const filter: string[] = ['SteamAchievements', 'Steam64', 'Steam'];
         achievementList = omit(achievementList.ACHIEVE_DATA || achievementList, filter);
 
-        console.log(achievementList);
-
         Object.keys(achievementList).forEach((achievementName) => {
             const achievementData: any = achievementList[achievementName];
             const normalizedProgress = normalizeProgress(achievementData.CurProgress, achievementData.MaxProgress);
 
-            unlockedAchievementList.push({
-                name: achievementName,
-                achieved: <0 | 1>+(achievementData.State === '0100000001'),
-                currentProgress: normalizedProgress.currentProgress,
-                maxProgress: normalizedProgress.maximProgress,
-                unlockTime: normalizeTimestamp(achievementData.Time)
-            });
+            if (achievementData.State === '0100000001') {
+                unlockedAchievementList.push({
+                    name: achievementName,
+                    currentProgress: normalizedProgress.currentProgress,
+                    maxProgress: normalizedProgress.maximProgress,
+                    unlockTime: normalizeTimestamp(achievementData.Time)
+                });
+            }
         });
 
         return unlockedAchievementList;

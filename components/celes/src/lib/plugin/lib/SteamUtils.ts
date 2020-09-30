@@ -132,11 +132,13 @@ class SteamUtils {
                 break;
             } catch (e) {
                 // TODO ADD DEBUG VERBOSE
-                // console.log(e);
+                // console.debug(e);
             }
         }
         if (!local) {
-            throw `No achievement files found in '${gameFolder}'`;
+            // TODO ADD PROPER LOGGER
+            // console.debug(`No achievement files found in '${gameFolder}'`);
+            local = {}
         }
 
         return local;

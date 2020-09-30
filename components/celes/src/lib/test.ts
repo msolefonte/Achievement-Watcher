@@ -1,112 +1,56 @@
-// @ts-ignore
-import {IGameData, IGameMetadata} from '../types';
+import {IGameData, IGameMetadata, IUnlockedAchievement} from '../types';
+import {Parser} from './plugin/lib/Parser';
 
+const path = require('path');
+const fs = require('fs').promises;
 
-// const { Codex } = require('./plugin/codex')
-const { Skidrow } = require('./plugin/skidrow')
-const { Reloaded } = require('./plugin/reloaded')
+const SYSTEM_LANGUAGE = 'english';
 
-//******************************************************************************
-//************************************CODEX*************************************
-//******************************************************************************
+async function scrap(callbackProgress?: Function): Promise<any> {
+    const pluginsFolder = path.join(__dirname, 'plugin');
+    const scrappedGames: any = [];
 
-// const codex = new Codex();
-//
-// codex.scan().then((res: IGameMetadata) => console.log(res));
-// codex.getGameData('382900', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// codex.getGameData('779340', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// codex.getGameData('814380', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// codex.getAchievements('C:/Users/Marc/AppData/Roaming/Steam/CODEX/382900')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });
-// codex.getAchievements('C:/Users/Public/Documents/Steam/CODEX/779340')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });
-// codex.getAchievements('C:/Users/Public/Documents/Steam/CODEX/814380')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });
+    const pluginsFolderFiles: string[] = await fs.readdir(pluginsFolder);
+    for (let i = 0; i < pluginsFolderFiles.length; i++) {
+        const progressPercentage: number = Math.floor((i / pluginsFolderFiles.length) * 100);
 
-//******************************************************************************
-//***********************************SKIDROW************************************
-//******************************************************************************
+        try {
+            if (pluginsFolderFiles[i].endsWith('.js')) {
+                const plugin = require('./plugin/' + pluginsFolderFiles[i]);
+                const parser: Parser = new plugin[Object.keys(plugin)[0]]();
 
-// const skidrow = new Skidrow();
-//
-// skidrow.scan().then((res: IGameMetadata) => console.log(res));
-// codex.getGameData('382900', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// codex.getGameData('779340', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// codex.getGameData('814380', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// codex.getAchievements('C:/Users/Marc/AppData/Roaming/Steam/CODEX/382900')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });
-// codex.getAchievements('C:/Users/Public/Documents/Steam/CODEX/779340')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });
-// codex.getAchievements('C:/Users/Public/Documents/Steam/CODEX/814380')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });
+                const listOfGames: IGameMetadata[] = await parser.scan();
 
-//******************************************************************************
-//***********************************SKIDROW************************************
-//******************************************************************************
+                for (let j = 0; j < listOfGames.length; j++) {
+                    const gameData: IGameData = await parser.getGameData(listOfGames[j].appId, SYSTEM_LANGUAGE);
+                    const unlockedAchievements: IUnlockedAchievement[] = await parser.getAchievements(listOfGames[j]);
 
-const reloaded = new Reloaded();
+                    const scrappedGame: any = gameData;
+                    scrappedGame.achievement.unlocked = unlockedAchievements;
 
-// reloaded.scan().then((res: IGameMetadata) => console.log(res));
-// reloaded.getGameData('292730', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// reloaded.getGameData('311210', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// reloaded.getGameData('312750', 'english', undefined).then((res: IGameData) => {
-//     console.log(res);
-// });
-// reloaded.getAchievements('C:/ProgramData/Steam/Player/292730')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });
-reloaded.getAchievements('C:/ProgramData/Steam/RLD!/311210')
-    .then((res: any) => {
-        console.log(res);
-    }).catch((res: any) => {
-    console.log(res);
+                    scrappedGames.push(scrappedGame);
+                }
+            }
+        } catch (error) {
+            // console.debug('Error loading plugin', pluginsFolderFiles[i] + ":", error);
+        }
+
+        if (callbackProgress instanceof Function) {
+            callbackProgress(progressPercentage);
+        }
+    }
+    return scrappedGames;
+}
+
+// Load Local Folder + Scrap. Merge. Update Folder with new data
+// async function load(callbackProgress?: Function) {}
+
+// Load. Read Local Folder. Store it in path
+// async function export(path: string) {}
+
+// Read path. Read local. If not force, merge with local. Store local
+// async function import(path: string, force: boolean = false) {}
+
+scrap().then((foundGames) => {
+    console.log(foundGames);
 });
-// reloaded.getAchievements('C:/ProgramData/Steam/RLD!/312750')
-//     .then((res: any) => {
-//         console.log(res);
-//     }).catch((res: any) => {
-//     console.log(res);
-// });

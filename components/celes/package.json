@@ -1,7 +1,7 @@
 {
-  "name": "achievement-watcher-collector",
+  "name": "achievement-watcher-celes",
   "version": "0.1.0",
-  "description": "A sexy achievement file parser",
+  "description": "An achievements scrapper",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

@@ -12,12 +12,13 @@ const steamLanguages = require('../../../../locale/steam.json');
 // TODO CHECK LOGS / THROWS
 
 abstract class SteamEmulatorParser implements Parser {
+    abstract readonly source: string;
+
     abstract normalizeUnlockedAchievementList(achievementList: any): IUnlockedAchievement[];
 
     abstract getSpecificFoldersToScan(): string[];
 
     async scan(additionalFoldersToScan: string[] = []): Promise<IGameMetadata[]> {
-        // TODO THIS BLOCK IS GENERAL
         const specificFoldersToScan: string[] = this.getSpecificFoldersToScan();
         const foldersToScan: string[] = await SteamUtils.getFoldersToScan(specificFoldersToScan, additionalFoldersToScan);
 
@@ -29,23 +30,9 @@ abstract class SteamEmulatorParser implements Parser {
                 data: {
                     type: 'file',
                     path: dir
-                }
+                },
+                source: this.source
             };
-
-            // TODO THIS BLOCK IS GENERAL
-            if (dir.includes('CODEX')) {
-                gameMetadata.source = 'Codex';
-            } else if (dir.includes('Goldberg')) {
-                gameMetadata.source = 'Goldberg';
-            } else if (dir.includes('SKIDROW')) {
-                gameMetadata.source = 'Skidrow';
-            } else if (dir.includes('SmartSteamEmu')) {
-                gameMetadata.source = 'SmartSteamEmu';
-            } else if (dir.includes('ProgramData/Steam')) {
-                gameMetadata.source = 'Reloaded - 3DM';
-            } else if (dir.includes('CreamAPI')) {
-                gameMetadata.source = 'CreamAPI';
-            }
 
             gamesMetadata.push(gameMetadata);
         }
@@ -81,8 +68,8 @@ abstract class SteamEmulatorParser implements Parser {
         return gameData;
     }
 
-    async getAchievements(gameFolder: string): Promise<IUnlockedAchievement[]> {
-        const achievementList: Object = await SteamUtils.getAchievementListFromGameFolder(gameFolder);
+    async getAchievements(game: IGameMetadata): Promise<IUnlockedAchievement[]> {
+        const achievementList: Object = await SteamUtils.getAchievementListFromGameFolder(<string> game.data.path);
         return this.normalizeUnlockedAchievementList(achievementList);
     }
 }

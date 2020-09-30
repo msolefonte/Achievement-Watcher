@@ -36,7 +36,7 @@ export interface IGetAchievementsConfig {
 
 export interface IUnlockedAchievement {
     name: string;
-    achieved: 0 | 1;
+    // achieved: 0 | 1;
     currentProgress: number;
     maxProgress: number;
     unlockTime: number;

@@ -10,6 +10,8 @@ const omit = require('lodash.omit');
 const path = require('path');
 
 class Codex extends SteamEmulatorParser {
+    readonly source: string = 'Codex';
+
     private readonly publicDataPath: string = <string>process.env['Public'];
     private readonly appDataPath: string = <string>process.env['APPDATA'];
 
@@ -27,13 +29,14 @@ class Codex extends SteamEmulatorParser {
             const achievementData: any = achievementList[achievementName];
             const normalizedProgress = normalizeProgress(achievementData.CurProgress, achievementData.MaxProgress);
 
-            unlockedAchievementList.push({
-                name: achievementName,
-                achieved: <0 | 1>+(achievementData.Achieved === '1'),
-                currentProgress: normalizedProgress.currentProgress,
-                maxProgress: normalizedProgress.maximProgress,
-                unlockTime: achievementData.UnlockTime,
-            });
+            if (achievementData.Achieved === '1') {
+                unlockedAchievementList.push({
+                    name: achievementName,
+                    currentProgress: normalizedProgress.currentProgress,
+                    maxProgress: normalizedProgress.maximProgress,
+                    unlockTime: achievementData.UnlockTime,
+                });
+            }
         });
 
         return unlockedAchievementList;
